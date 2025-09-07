@@ -17,3 +17,7 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 ```
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml
+```

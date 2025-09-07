@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend
+spec:
+  destination:
+    namespace: code-analyzer
+    server: https://kubernetes.default.svc
+  source:
+    path: k8s/
+    repoURL: https://github.com/Deimos-code-analyzer/Backend.git
+    targetRevision: HEAD
+    directory:
+      recurse: true
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+      enabled: true
