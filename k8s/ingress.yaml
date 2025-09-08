@@ -10,7 +10,7 @@ spec:
   - host:
     http:
       paths:
-      - path: /api
+      - path: /notes
         pathType: Prefix
         backend:
           service:
