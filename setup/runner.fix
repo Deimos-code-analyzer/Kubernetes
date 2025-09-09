@@ -69,3 +69,22 @@ if [ ! -f "/usr/local/bin/helm" ]; then
 else
     echo "[INFO] Helm already installed, skipping."
 fi
+
+
+
+# --- Install Prometheus and Grafana ---
+
+if ! helm list -n monitoring | grep -q "prometheus"; then
+    echo "[INFO] Installing kube-prometheus-stack (Prometheus + Grafana)..."
+
+    if ! helm repo list | grep -q "prometheus-community"; then
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    fi
+    helm repo update
+
+    kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+    helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
+else
+    echo "[INFO] kube-prometheus-stack already installed in namespace monitoring, skipping."
+fi
