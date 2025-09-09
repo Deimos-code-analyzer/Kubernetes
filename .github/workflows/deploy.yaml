@@ -10,6 +10,23 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Run job
+      - name: cluster configuration
         run: |
           sh setup/runner.fix
+
+      - name: initialize argocd
+        run: |
+          kubectl apply -f k8s/
+          kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+          kubectl wait --for=condition=available --timeout=600s deployment/argoc
+
+      - name: create aws secret
+        run: |
+          kubectl create secret generic aws-secret \
+          --from-literal=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+          --from-literal=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+          -n code-analyzer
+
+      - name: add microservices
+        run: |
+          kubectl apply -f k8s/microservices/
