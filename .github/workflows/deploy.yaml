@@ -23,9 +23,10 @@ jobs:
       - name: create aws secret
         run: |
           kubectl create secret generic aws-secret \
-          --from-literal=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-          --from-literal=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-          -n code-analyzer
+            --from-literal=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            --from-literal=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+            -n code-analyzer \
+            --dry-run=client -o yaml | kubectl apply -f -
 
       - name: add microservices
         run: |
