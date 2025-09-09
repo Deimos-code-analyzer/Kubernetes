@@ -98,8 +98,8 @@ fi
 
 if ! kubectl get deployment ingress-nginx-controller -n ingress-nginx &> /dev/null; then
     echo "[INFO] Installing Nginx Ingress Controller..."
-    
-    kubectl get namespace ingress-nginx &> /dev/null || kubectl create namespace ingress-nginx
+
+    kubectl create namespace ingress-nginx --dry-run-client -o yaml | kubectl apply -f
 
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.1/deploy/static/provider/cloud/deploy.yaml
 else
