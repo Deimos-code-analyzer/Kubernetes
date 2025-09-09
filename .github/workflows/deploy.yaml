@@ -31,3 +31,7 @@ jobs:
       - name: add microservices
         run: |
           kubectl apply -f k8s/microservices/
+
+      - name: expose argocd
+        run: |
+          kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}' --type=merge
