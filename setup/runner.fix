@@ -47,6 +47,7 @@ fi
 if ! kubectl get deployment metrics-server -n kube-system &> /dev/null; then
     echo "[INFO] Installing Metrics Server..."
     kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+    kubectl -n kube-system patch deployment metrics-server --type='json' -p='[{"op":"replace","path":"/spec/template/spec/containers/0/args","value":["--cert-dir=/tmp","--secure-port=4443","--kubelet-insecure-tls","--kubelet-preferred-address-types=InternalIP,Hostname,ExternalIP"]}]'
 else
     echo "[INFO] Metrics Server already installed, skipping."
 fi
