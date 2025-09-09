@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+sudo hostnamectl set-hostname master
+ 
+# --- Install Dependencies ---
+sudo apt update -y
+sudo apt upgrade -y
+
+# --- Kubernetes Cluster Setup ---
