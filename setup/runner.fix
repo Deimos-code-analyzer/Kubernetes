@@ -96,14 +96,12 @@ fi
 
 # --- Install Ingress NGINX Controller ---
 
-if ! kubectl get namespace ingress-nginx &> /dev/null; then
+if ! kubectl get deployment ingress-nginx-controller -n ingress-nginx &> /dev/null; then
     echo "[INFO] Installing Nginx Ingress Controller..."
-    kubectl create namespace ingress-nginx
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.1/deploy/static/provider/cloud/deploy.yaml
-elif ! kubectl get deployment ingress-nginx-controller -n ingress-nginx &> /dev/null; then
-    echo "[INFO] Namespace exists but deployment missing, applying manifest..."
+    
+    kubectl get namespace ingress-nginx &> /dev/null || kubectl create namespace ingress-nginx
+
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.1/deploy/static/provider/cloud/deploy.yaml
 else
     echo "[INFO] Nginx Ingress Controller already installed, skipping."
 fi
-
