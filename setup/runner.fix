@@ -96,12 +96,13 @@ fi
 
 # --- Install Ingress NGINX Controller ---
 
+if ! kubectl get namespace ingress-nginx &> /dev/null; then
+    echo "[INFO] Creating ingress-nginx namespace..."
+    kubectl create namespace ingress-nginx
+fi
+
 if ! kubectl get deployment ingress-nginx-controller -n ingress-nginx &> /dev/null; then
     echo "[INFO] Installing Nginx Ingress Controller..."
-
-    kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
-    sleep 7
-
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.1/deploy/static/provider/cloud/deploy.yaml
 else
     echo "[INFO] Nginx Ingress Controller already installed, skipping."
