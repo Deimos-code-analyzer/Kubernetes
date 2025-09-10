@@ -16,7 +16,9 @@ jobs:
 
       - name: initialize argocd
         run: |
-          kubectl apply -f k8s/
+          kubectl apply -f k8s/namespace.yaml
+          sleep 7
+          kubectl apply -f k8s/ingress.yaml
           kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
           kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
 
