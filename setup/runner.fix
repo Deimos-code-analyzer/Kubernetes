@@ -94,10 +94,8 @@ fi
 
 # --- Install Ingress NGINX Controller ---
 
-if ! kubectl get namespace ingress-nginx &> /dev/null; then
-    echo "[INFO] Creating ingress-nginx namespace..."
-    kubectl create namespace ingress-nginx
-fi
+echo "[INFO] Ensuring ingress-nginx namespace exists..."
+kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
 
 if ! kubectl get deployment ingress-nginx-controller -n ingress-nginx &> /dev/null; then
     echo "[INFO] Installing Nginx Ingress Controller..."
