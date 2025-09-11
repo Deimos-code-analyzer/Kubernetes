@@ -18,26 +18,34 @@ jobs:
         run: |
           sudo -u ubuntu bash -c "sh setup/runner.fix"
 
-      - name: initialize argocd
+      - name: Initialize ArgoCD
         run: |
-          kubectl apply -f k8s/namespaces.yaml
-          sleep 7
-          kubectl apply -f k8s/ingress.yaml
-          kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-          kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
+          sudo -u ubuntu bash -c '
+            kubectl apply -f k8s/namespaces.yaml
+            sleep 7
+            kubectl apply -f k8s/ingress.yaml
+            kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+            kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
+          '
 
-      - name: create aws secret
+      - name: Create AWS secret
         run: |
-          kubectl create secret generic aws-credentials \
-            --from-literal=aws-access-key=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            --from-literal=aws-secret-key=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -n code-analyzer \
-            --dry-run=client -o yaml | kubectl apply -f -
+          sudo -u ubuntu bash -c '
+            kubectl create secret generic aws-credentials \
+              --from-literal=aws-access-key=${{ secrets.AWS_ACCESS_KEY_ID }} \
+              --from-literal=aws-secret-key=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+              -n code-analyzer \
+              --dry-run=client -o yaml | kubectl apply -f -
+          '
 
-      - name: add microservices
+      - name: Add microservices
         run: |
-          kubectl apply -f k8s/microservices/
+          sudo -u ubuntu bash -c '
+            kubectl apply -f k8s/microservices/
+          '
 
-      - name: expose argocd
+      - name: Expose ArgoCD
         run: |
-          kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}' --type=merge
+          sudo -u ubuntu bash -c '
+            kubectl patch svc argocd-server -n argocd -p '\''{"spec": {"type": "NodePort"}}'\'' --type=merge
+          '
