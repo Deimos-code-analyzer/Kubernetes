@@ -12,12 +12,11 @@ jobs:
 
       - name: Show current user
         run: |
-          sudo -u ubuntu -i
           whoami
 
       - name: cluster configuration
         run: |
-          sh setup/runner.fix
+          sudo -u ubuntu bash -c "sh setup/runner.fix"
 
       - name: initialize argocd
         run: |
