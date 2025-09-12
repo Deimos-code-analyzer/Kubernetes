@@ -12,15 +12,12 @@ spec:
     namespace: code-analyzer
     server: https://kubernetes.default.svc
   source:
-    path: k8s/
     repoURL: https://github.com/Deimos-code-analyzer/Bedrock.git
+    path: k8s/
     targetRevision: HEAD
-    directory:
-      recurse: true
-  sources: []
+    kustomize: {}
   project: default
   syncPolicy:
     automated:
       prune: false
       selfHeal: true
-      enabled: true

@@ -12,14 +12,12 @@ spec:
     namespace: code-analyzer
     server: https://kubernetes.default.svc
   source:
-    path: k8s/
     repoURL: https://github.com/Deimos-code-analyzer/Backend.git
+    path: k8s/
     targetRevision: HEAD
-    directory:
-      recurse: true
+    kustomize: {}
   project: default
   syncPolicy:
     automated:
       prune: false
       selfHeal: true
-      enabled: true
