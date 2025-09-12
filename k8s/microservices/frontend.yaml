@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: frontend
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: frontend=ayushjsrtia/code-analyzer-frontend
+    argocd-image-updater.argoproj.io/frontend.update-strategy: latest
+    argocd-image-updater.argoproj.io/frontend.allow-tags: regexp:^.*$
 spec:
   destination:
     namespace: code-analyzer

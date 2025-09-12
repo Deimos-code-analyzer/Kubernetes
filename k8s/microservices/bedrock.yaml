@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: bedrock
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: bedrock=ayushjsrtia/code-analyzer-bedrock
+    argocd-image-updater.argoproj.io/bedrock.update-strategy: latest
+    argocd-image-updater.argoproj.io/bedrock.allow-tags: regexp:^.*$
 spec:
   destination:
     namespace: code-analyzer
