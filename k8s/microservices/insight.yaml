@@ -9,7 +9,7 @@ metadata:
     argocd-image-updater.argoproj.io/insight.allow-tags: regexp:^.*$
 spec:
   destination:
-    namespace: code-analyzer
+    namespace: insight
     server: https://kubernetes.default.svc
   source:
     repoURL: https://github.com/Deimos-code-analyzer/Insight.git
