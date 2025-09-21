@@ -13,3 +13,10 @@ metadata:
   name: code-analyzer
 spec: {}
 status: {}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: insight
+spec: {}
