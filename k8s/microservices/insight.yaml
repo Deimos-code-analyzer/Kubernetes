@@ -12,7 +12,7 @@ spec:
     namespace: insight
     server: https://kubernetes.default.svc
   source:
-    repoURL: https://github.com/Deimos-code-analyzer/Insight.git
+    repoURL: https://github.com/Deimos-code-analyzer/Insights.git
     path: k8s/
     targetRevision: HEAD
     kustomize: {}
