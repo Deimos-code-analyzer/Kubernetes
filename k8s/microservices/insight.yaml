@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: insight
-  namespace: insight
+  namespace: argocd
   annotations:
     argocd-image-updater.argoproj.io/image-list: insight=ayushjsrtia/code-analyzer-insight
     argocd-image-updater.argoproj.io/insight.update-strategy: latest
