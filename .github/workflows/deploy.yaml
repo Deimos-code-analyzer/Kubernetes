@@ -57,3 +57,79 @@ jobs:
           sudo -u ubuntu bash -c '
             kubectl patch svc argocd-server -n argocd -p '\''{"spec": {"type": "NodePort"}}'\'' --type=merge
           '
+
+  # DAST (Dynamic Application Security Testing) Job
+  # Uncomment and configure this job to run DAST scans on your deployed applications
+  # dast-scan:
+  #   runs-on: self-hosted
+  #   needs: rerun
+  #   if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v3
+  #
+  #     - name: Wait for application to be ready
+  #       run: |
+  #         echo "Waiting for applications to be fully deployed..."
+  #         sleep 60
+  #         # kubectl wait --for=condition=available --timeout=300s deployment/frontend -n code-analyzer
+  #         # kubectl wait --for=condition=available --timeout=300s deployment/backend -n code-analyzer
+  #
+  #     - name: Get application URLs
+  #       id: get-urls
+  #       run: |
+  #         # Get the NodePort or LoadBalancer IPs for your services
+  #         # FRONTEND_URL=$(kubectl get svc frontend -n code-analyzer -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  #         # BACKEND_URL=$(kubectl get svc backend -n code-analyzer -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  #         # echo "frontend-url=http://$FRONTEND_URL" >> $GITHUB_OUTPUT
+  #         # echo "backend-url=http://$BACKEND_URL" >> $GITHUB_OUTPUT
+  #         echo "frontend-url=http://localhost:3000" >> $GITHUB_OUTPUT
+  #         echo "backend-url=http://localhost:8080" >> $GITHUB_OUTPUT
+  #
+  #     - name: Run OWASP ZAP DAST Scan
+  #       uses: zaproxy/action-baseline@v0.12.0
+  #       with:
+  #         target: ${{ steps.get-urls.outputs.frontend-url }}
+  #         rules_file_name: '.zap/rules.tsv'
+  #         cmd_options: '-a'
+  #
+  #     - name: Run DAST on Backend API
+  #       uses: zaproxy/action-api-scan@v0.7.0
+  #       with:
+  #         target: ${{ steps.get-urls.outputs.backend-url }}
+  #         format: openapi
+  #         cmd_options: '-a'
+  #
+  #     - name: Create DAST Report
+  #       if: always()
+  #       run: |
+  #         echo "DAST scan completed"
+  #         # Generate summary report
+  #         echo "## DAST Security Scan Results" > dast-report.md
+  #         echo "- Frontend scan completed for: ${{ steps.get-urls.outputs.frontend-url }}" >> dast-report.md
+  #         echo "- Backend API scan completed for: ${{ steps.get-urls.outputs.backend-url }}" >> dast-report.md
+  #         echo "- Detailed results are available in the ZAP reports" >> dast-report.md
+  #
+  #     - name: Upload DAST Results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: dast-results
+  #         path: |
+  #           report_html.html
+  #           report_json.json
+  #           dast-report.md
+  #
+  #     - name: Comment DAST Results on PR
+  #       if: github.event_name == 'pull_request'
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           const fs = require('fs');
+  #           const report = fs.readFileSync('dast-report.md', 'utf8');
+  #           github.rest.issues.createComment({
+  #             issue_number: context.issue.number,
+  #             owner: context.repo.owner,
+  #             repo: context.repo.repo,
+  #             body: report
+  #           });
